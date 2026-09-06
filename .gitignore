@@ -1,0 +1,65 @@
+# Project Specific
+old/company_theme_and_policy.md
+evals/edge case testing.ipynb
+evals/guardian_generated_test_set.csv
+data/processed
+data/raw
+prompts.py
+/evidently_ui_workspace
+/workspace
+old/config.py
+data/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+#*.ipynb
+
+# Spark/Hadoop artifacts
+metastore_db/
+derby.log
+spark-warehouse/
+*.crc
+._SUCCESS.crc
+
+# Logs
+*.log
+logs/
+
+# Generated/processed data (keep raw sample data)
+**/data/processed/
+**/data/bad_records/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment variables
+.env
