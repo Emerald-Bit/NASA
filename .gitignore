@@ -1,14 +1,6 @@
 # Project Specific
-old/company_theme_and_policy.md
-evals/edge case testing.ipynb
-evals/guardian_generated_test_set.csv
-data/processed
-data/raw
-prompts.py
-/evidently_ui_workspace
-/workspace
-old/config.py
-data/
+credential.json
+.github\
 
 # Python artifacts
 __pycache__/
