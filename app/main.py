@@ -14,15 +14,15 @@ load_dotenv()
 
 NASA_API_KEY = os.getenv("NASA_API")
 
-if not NASA_API_KEY:
-    raise Exception("The API key is missing.")
+# if not NASA_API_KEY:
+#     raise Exception("The API key is missing.")
 
-if type(NASA_API_KEY) != str:
-    raise Exception("The API is malformed, it is not a string type.")
+# if type(NASA_API_KEY) != str:
+#     raise Exception("The API is malformed, it is not a string type.")
 
 time_zone = ZoneInfo(CURRENT_TZ)
 todays_date = datetime.now(tz=time_zone).date()
-apod_url = f"https://science.nasa.gov/wp-json/wp/v2/apod-basic?api_key={NASA_API_KEY}"
+# apod_url = f"https://science.nasa.gov/wp-json/wp/v2/apod-basic?api_key={NASA_API_KEY}"
 apod_parameters = {"date": todays_date,
                    "start_date": None,
                    "end_date": todays_date,
@@ -46,6 +46,15 @@ def get_health() -> dict[str, str]:
          response_model=ApodResponseValidation,
          description="Return NASA's astronomy picture of the day.")
 async def get_apod():
+
+    if not NASA_API_KEY:
+        raise Exception("The API key is missing.")
+
+    if type(NASA_API_KEY) != str:
+        raise Exception("The API is malformed, it is not a string type.")
+
+    apod_url = f"https://science.nasa.gov/wp-json/wp/v2/apod-basic?api_key={NASA_API_KEY}"
+
 
     payload = await api_request(url=apod_url, parameters=apod_parameters)
 
