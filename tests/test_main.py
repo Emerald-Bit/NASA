@@ -15,8 +15,7 @@ def test_get_health():
 
 def test_chat_response(monkeypatch):
 
-    monkeypatch.setenv("GOOGLE_API_KEY", "test-api-key")
-    monkeypatch.setenv("NASA_API_KEY", "test-nasa-key")
+    monkeypatch.setattr("app.llm.GOOGLE_API_KEY", "test-api-key")
 
     mock_data = "Test Text."
 
@@ -72,7 +71,8 @@ async def test_apod_missing_image(monkeypatch):
 
 # Error 3: An error from the llm call in llm.py propagates to, and is caught in, main.py
 @pytest.mark.asyncio
-async def test_apod_llm_error():
+async def test_apod_llm_error(monkeypatch):
+    monkeypatch.setattr("app.main.NASA_API_KEY", "test-nasa-key")
     with patch("app.main.api_request", new_callable=AsyncMock) as mock_api:
         with patch("app.main.chat_response") as mock_chat:
 
