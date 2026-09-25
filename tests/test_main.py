@@ -13,7 +13,9 @@ def test_get_health():
     assert get_health() == {"health": "okay"}
 
 
-def test_chat_response():
+def test_chat_response(monkeypatch):
+
+    monkeypatch.setenv("GOOGLE_API_KEY", "test-api-key")
 
     mock_data = "Test Text."
 
@@ -35,7 +37,8 @@ def test_chat_response():
 
 # Error 1: payload from api_request call is None
 @pytest.mark.asyncio
-async def test_apod_no_payload():
+async def test_apod_no_payload(monkeypatch):
+    monkeypatch.setattr("app.main.NASA_API_KEY", "test-nasa-key")
     with patch("app.main.api_request", new_callable=AsyncMock) as mock_response_class:
         
         mock_response_class.side_effect = Exception("apod endpoint call failed")

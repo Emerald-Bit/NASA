@@ -79,7 +79,7 @@ async def get_apod():
     except RuntimeError as e:
         raise HTTPException(
             status_code=502,
-            detail="There was an issue with the llm call."
+            detail="Problem with llm"
         )
 
     return {
