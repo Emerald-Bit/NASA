@@ -56,7 +56,8 @@ async def test_apod_no_payload(monkeypatch):
 
 # Error 2: No image is returned from Nasa's APOD for whatever reason
 @pytest.mark.asyncio
-async def test_apod_missing_image():
+async def test_apod_missing_image(monkeypatch):
+    monkeypatch.setattr("app.main.NASA_API_KEY", "test-nasa-key")
     with patch("app.main.api_request", new_callable=AsyncMock) as mock_api:
         mock_api.return_value = {
             "title": "Test",

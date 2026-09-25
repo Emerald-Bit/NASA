@@ -12,7 +12,7 @@ from .llm import chat_response
 
 load_dotenv()
 
-NASA_API_KEY = os.getenv("NASA_API")
+NASA_API_KEY = os.getenv("NASA_API_KEY")
 
 # if not NASA_API_KEY:
 #     raise Exception("The API key is missing.")
