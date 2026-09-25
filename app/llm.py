@@ -10,15 +10,21 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
-if not GOOGLE_API_KEY:
-    raise RuntimeError("The API key is missing.")
+# if not GOOGLE_API_KEY:
+#     raise RuntimeError("The API key is missing.")
 
-if not isinstance(SYSTEM_MESSAGE, str):
-    raise TypeError("The system message for the llm not a 'str' type.")
+# if not isinstance(SYSTEM_MESSAGE, str):
+#     raise TypeError("The system message for the llm not a 'str' type.")
 
 
 def chat_response(external_context:dict[str, str]) -> str | None:
     """Connects with the Google Gemini API in order to get a llm response for the user's message."""
+
+    if not GOOGLE_API_KEY:
+        raise RuntimeError("The API key is missing.")
+
+    if not isinstance(SYSTEM_MESSAGE, str):
+        raise TypeError("The system message for the llm not a 'str' type.")
 
     try:
         llm = ChatGoogleGenerativeAI(
