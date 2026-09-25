@@ -1,0 +1,8 @@
+{
+  "name": "github-nasa-main",
+  "issuer": "https://token.actions.githubusercontent.com",
+  "subject": "repo:Emerald-Bit@209567494/NASA@1357782451:ref:refs/heads/main",
+  "audiences": [
+    "api://AzureADTokenExchange"
+  ]
+}
