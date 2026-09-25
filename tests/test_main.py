@@ -16,6 +16,7 @@ def test_get_health():
 def test_chat_response(monkeypatch):
 
     monkeypatch.setenv("GOOGLE_API_KEY", "test-api-key")
+    monkeypatch.setenv("NASA_API_KEY", "test-nasa-key")
 
     mock_data = "Test Text."
 
