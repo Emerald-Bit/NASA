@@ -17,6 +17,8 @@ from .llm import chat_response
 load_dotenv()
 
 # Setting up logging
+Path(LOGS_DIR).mkdir(parents=True, exist_ok=True)
+
 logging_config = {
         "version": 1,
     "disable_existing_loggers": False, 
