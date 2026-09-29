@@ -17,20 +17,30 @@ def test_chat_response(monkeypatch):
 
     monkeypatch.setattr("app.llm.GOOGLE_API_KEY", "test-api-key")
 
-    mock_data = "Test Text."
+    mock_data = ("Test Text.")
+
+    mock_data_2 = ( {
+        "input_tokens": 20,
+        "output_tokens": 7,
+        "total_tokens": 27,
+        "input_token_details": {"cache_read": 0}})
+    # 'input_tokens': 20, 'output_tokens': 7, 'total_tokens': 27, 'input_token_details': {'cache_read': 0}})
+    #response.usage_metadata
 
     with patch("app.llm.ChatGoogleGenerativeAI") as mock_llm_class:
         fake_llm = Mock()
         fake_response = Mock()
 
         fake_response.content = mock_data
+        fake_response.usage_metadata = mock_data_2
+
         fake_llm.invoke.return_value = fake_response
         mock_llm_class.return_value = fake_llm
 
         response = chat_response(
             external_context = {"context": "external context"}
         )
-    assert response == mock_data
+    assert response == (mock_data, mock_data_2)
 
 
 # Error testing

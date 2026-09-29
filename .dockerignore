@@ -5,3 +5,4 @@ __Pycache__
 .idea
 *.pyc
 Working Notes.txt
+logs/

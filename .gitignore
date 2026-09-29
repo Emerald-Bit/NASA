@@ -3,6 +3,8 @@ credential.json
 .github\
 Working Notes.txt
 nasa_request_prac.py
+logs/
+old/
 
 # Python artifacts
 __pycache__/
