@@ -5,11 +5,12 @@ from dotenv import load_dotenv
 import uvicorn
 from pydantic import BaseModel
 from pathlib import Path
+import random
 from datetime import datetime
 import time
 from zoneinfo import ZoneInfo
 import logging.config
-from .config import CURRENT_TZ, LOGS_DIR
+from .config import CURRENT_TZ, LOGS_DIR, RANDOM_NUMBER
 from .request import api_request
 from .llm import chat_response
 
@@ -77,6 +78,12 @@ apod_parameters = {"date": todays_date,
 
 logger.info("Starting logging run in main.py\n"
             f"Date and Time: {todays_date_time}")
+
+
+if RANDOM_NUMBER < 0.5:
+    api_personality = "vader"
+else:
+    api_personality = "yoda"
 
 app = FastAPI()
 

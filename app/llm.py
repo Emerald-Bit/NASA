@@ -1,10 +1,23 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 from dotenv import load_dotenv
-from .config import SYSTEM_MESSAGE, LLM_MODEL, LLM_TEMPERATURE, LLM_TIMEOUT, LLM_MAX_RETRIES, LLM_MAX_TOKENS
+from .config import LLM_MODEL, LLM_TEMPERATURE, LLM_TIMEOUT, LLM_MAX_RETRIES, LLM_MAX_TOKENS, RANDOM_NUMBER
 
 
 load_dotenv()
+
+if RANDOM_NUMBER < 0.5:
+    from .config import SYSTEM_MESSAGE_VADER
+    if not isinstance(SYSTEM_MESSAGE_VADER, str):
+        raise TypeError("The imported system message for vader is not a string type.")
+    SYSTEM_MESSAGE = SYSTEM_MESSAGE_VADER
+else:
+    api_personality = "yoda"
+    from .config import SYSTEM_MESSAGE_YODA
+    if not isinstance(SYSTEM_MESSAGE_YODA, str):
+        raise TypeError("The imported system message for yoda is not a string type.")
+    SYSTEM_MESSAGE = SYSTEM_MESSAGE_YODA
+
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
