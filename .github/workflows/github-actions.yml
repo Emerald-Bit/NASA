@@ -16,12 +16,14 @@ env:
   RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
   CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
   ACR_NAME: ${{ vars.ACR_NAME }}
-  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
 
 jobs:
 # ----------------------------------------------------------- CI ---------------------------------------------------------------------------------------------
   test:
     runs-on: ubuntu-latest
+    environment: GOOGLE_API_KEY
+    env:
+      GOOGLE_API_KEY: $${{ secrets.GOOGLE_API_KEY }}
     
     steps:
       - name: Checkout code repo
