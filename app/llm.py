@@ -1,45 +1,16 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 from dotenv import load_dotenv
-from .config import LLM_MODEL, LLM_TEMPERATURE, LLM_TIMEOUT, LLM_MAX_RETRIES, LLM_MAX_TOKENS, RANDOM_NUMBER
+from .config import llm, SYSTEM_MESSAGE
 
 
 load_dotenv()
-
-if RANDOM_NUMBER < 0.5:
-    from .config import SYSTEM_MESSAGE_VADER
-    if not isinstance(SYSTEM_MESSAGE_VADER, str):
-        raise TypeError("The imported system message for vader is not a string type.")
-    SYSTEM_MESSAGE = SYSTEM_MESSAGE_VADER
-else:
-    api_personality = "yoda"
-    from .config import SYSTEM_MESSAGE_YODA
-    if not isinstance(SYSTEM_MESSAGE_YODA, str):
-        raise TypeError("The imported system message for yoda is not a string type.")
-    SYSTEM_MESSAGE = SYSTEM_MESSAGE_YODA
-
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 def chat_response(external_context:dict[str, str]) -> tuple | None:
     """Connects with the Google Gemini API in order to get a llm response for the user's message."""
 
-    if not GOOGLE_API_KEY:
-        raise RuntimeError("The API key is missing.")
-
-    if not isinstance(SYSTEM_MESSAGE, str):
-        raise TypeError("The system message for the llm not a 'str' type.")
-
     try:
-        llm = ChatGoogleGenerativeAI(
-            model=LLM_MODEL,
-            temperature=LLM_TEMPERATURE,
-            timeout=LLM_TIMEOUT,
-            max_retries=LLM_MAX_RETRIES,
-            max_tokens=LLM_MAX_TOKENS,
-            google_api_key=GOOGLE_API_KEY
-        )
-
         response = llm.invoke(
             [("system", SYSTEM_MESSAGE),
             ("human", f"Answer With the following external context material: {external_context}")]

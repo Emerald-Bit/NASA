@@ -1,9 +1,12 @@
 import pytest
+import unittest
 from unittest.mock import Mock, AsyncMock, patch
 from app.main import get_health, get_apod
 from app.llm import chat_response
 from app.request import api_request
 from fastapi import HTTPException
+from app.main import InMemoryHistory, apod_convo, ApodChatRequestValidation
+from langchain_core.messages import HumanMessage 
 
 
 # Unit testing
@@ -24,18 +27,15 @@ def test_chat_response(monkeypatch):
         "output_tokens": 7,
         "total_tokens": 27,
         "input_token_details": {"cache_read": 0}})
-    # 'input_tokens': 20, 'output_tokens': 7, 'total_tokens': 27, 'input_token_details': {'cache_read': 0}})
-    #response.usage_metadata
 
-    with patch("app.llm.ChatGoogleGenerativeAI") as mock_llm_class:
-        fake_llm = Mock()
+
+    with patch("app.llm.llm") as mock_llm_class:
         fake_response = Mock()
 
         fake_response.content = mock_data
         fake_response.usage_metadata = mock_data_2
 
-        fake_llm.invoke.return_value = fake_response
-        mock_llm_class.return_value = fake_llm
+        mock_llm_class.invoke.return_value = fake_response
 
         response = chat_response(
             external_context = {"context": "external context"}
@@ -52,7 +52,6 @@ async def test_apod_no_payload(monkeypatch):
     with patch("app.main.api_request", new_callable=AsyncMock) as mock_response_class:
         
         mock_response_class.side_effect = Exception("apod endpoint call failed")
-
 
         with pytest.raises(Exception):
 
@@ -99,3 +98,50 @@ async def test_apod_llm_error(monkeypatch):
                 await get_apod()
 
             assert error.value.status_code == 502
+
+
+#======================================
+
+# Test the InMemoryHistory class
+
+class TestInMemoryHistory(unittest.TestCase):
+    def setUp(self):
+        self.memory = InMemoryHistory()
+        self.message = HumanMessage(content="Text")
+
+    def test_add_messages(self):
+        second_message = HumanMessage(content="Text")
+        
+        self.memory.add_messages([self.message])
+        self.memory.add_messages([second_message])
+
+        self.assertEqual(self.memory.messages, [self.message, second_message])
+
+    def test_clear(self):
+        self.memory.add_messages([self.message])
+        self.memory.clear()
+        self.assertEqual(self.memory.messages, [])
+
+
+# Test in event of error
+
+# Error 1: payload from api_request call is None
+@pytest.mark.asyncio
+async def test_apod_convo_llm_error(monkeypatch):
+    monkeypatch.setattr("app.main.message_count", 1)
+
+    request = ApodChatRequestValidation(request="Tell me about this pic.")
+
+    with patch("app.main.conversational_rag_chain", new_callable=AsyncMock) as mock_chain:
+        mock_chain.invoke.side_effect = RuntimeError("Issue with LLM.")
+
+        with pytest.raises(RuntimeError) as error:
+            await apod_convo(request)
+
+        assert str(error.value) == (
+            "There was an issue with the LLM API call within the "
+            "apod_convo endpoint."
+        )
+
+        mock_chain.invoke.assert_called_once()
+        
