@@ -98,6 +98,7 @@ class ApodResponseValidation(BaseModel):
     input_tokens: int | None
     output_tokens: int | None
     eclipsed_time: float
+    session_id: str
 
 #=======================APOD_convo Endpoint setup======================
 
@@ -149,6 +150,7 @@ class ApodChatResponseValidation(BaseModel):
     total_output_tokens: int
     message_count: int
     api_personality: str
+    session_id: str
 
 
 async def get_nasa_information(NASA_API_KEY, apod_parameters):
@@ -246,7 +248,8 @@ async def get_apod():
         "pic_link": final_nasa_info["pic_link"], 
         "input_tokens": final_nasa_info["input_tokens"], 
         "output_tokens": final_nasa_info["output_tokens"], 
-        "eclipsed_time": eclipsed_time
+        "eclipsed_time": eclipsed_time,
+        "session_id": SESSION_ID
         }
 
 
@@ -277,7 +280,8 @@ async def apod_convo(request: ApodChatRequestValidation):
             "total_input_tokens": total_input_tokens,
             "total_output_tokens": total_output_tokens,
             "message_count": message_count,
-            "api_personality": API_PERSONALITY
+            "api_personality": API_PERSONALITY,
+            "session_id": SESSION_ID
         }
 
     else:
@@ -304,7 +308,8 @@ async def apod_convo(request: ApodChatRequestValidation):
             "total_input_tokens": total_input_tokens,
             "total_output_tokens": total_output_tokens,
             "message_count": message_count,
-            "api_personality": API_PERSONALITY
+            "api_personality": API_PERSONALITY,
+            "session_id": SESSION_ID
         }
 
 

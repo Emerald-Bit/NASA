@@ -17,6 +17,3 @@ RANDOM_NUMBER = random.random()
 # File paths
 PROJECT_ROOT_PATH = Path(__file__).resolve().parents[1]
 LOGS_DIR = str(PROJECT_ROOT_PATH / "logs")
-
-print(PROJECT_ROOT_PATH)
-
