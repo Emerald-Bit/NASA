@@ -130,7 +130,8 @@ class TestInMemoryHistory(unittest.TestCase):
 async def test_apod_convo_llm_error(monkeypatch):
     monkeypatch.setattr("app.main.message_count", 1)
 
-    request = ApodChatRequestValidation(request="Tell me about this pic.")
+    request = ApodChatRequestValidation(request="Tell me about this pic.",
+                                        session_id=None)
 
     with patch("app.main.conversational_rag_chain", new_callable=AsyncMock) as mock_chain:
         mock_chain.invoke.side_effect = RuntimeError("Issue with LLM.")

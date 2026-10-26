@@ -142,6 +142,7 @@ conversational_rag_chain = RunnableWithMessageHistory(
 
 class ApodChatRequestValidation(BaseModel):
     request: str
+    session_id: str | None
 
 class ApodChatResponseValidation(BaseModel):
     message: str | None
@@ -260,6 +261,11 @@ async def apod_convo(request: ApodChatRequestValidation):
 
     global message_count, total_input_tokens, total_output_tokens
 
+    if request.session_id == None:
+                session_id = SESSION_ID
+    else:
+        session_id = request.session_id
+
     if message_count == 0:
 
         results = await get_nasa_information(NASA_API_KEY, apod_parameters)
@@ -267,7 +273,7 @@ async def apod_convo(request: ApodChatRequestValidation):
         message = results.get("message")
         pic_link = results.get("pic_link")
 
-        history = get_session_history(SESSION_ID)
+        history = get_session_history(session_id)
         history.add_message(
             AIMessage(content=message)
         )
@@ -301,6 +307,8 @@ async def apod_convo(request: ApodChatRequestValidation):
         except Exception as e:
             logger.error(f"Problem with LLM call:{e}")
             raise RuntimeError(f"There was an issue with the LLM API call within the apod_convo endpoint.")
+
+        
 
         return {
             "message": message,
