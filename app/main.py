@@ -287,14 +287,21 @@ async def apod_convo(request: ApodChatRequestValidation):
             "total_output_tokens": total_output_tokens,
             "message_count": message_count,
             "api_personality": API_PERSONALITY,
-            "session_id": SESSION_ID
+            "session_id": session_id
         }
 
     else:
         try:
+
+            history = get_session_history(session_id)
+
+            if not history.messages:
+                results = await get_nasa_information(NASA_API_KEY, apod_parameters)
+                history.add_message(AIMessage(content=results["message"]))
+
             llm_response = conversational_rag_chain.invoke(
                 {"input": request.request},
-                config={"configurable": {"session_id": SESSION_ID}}
+                config={"configurable": {"session_id": session_id}}
             )
 
             total_input_tokens += llm_response.usage_metadata["input_tokens"]
@@ -317,7 +324,7 @@ async def apod_convo(request: ApodChatRequestValidation):
             "total_output_tokens": total_output_tokens,
             "message_count": message_count,
             "api_personality": API_PERSONALITY,
-            "session_id": SESSION_ID
+            "session_id": session_id
         }
 
 
